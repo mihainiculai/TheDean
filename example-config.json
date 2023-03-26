@@ -1,0 +1,11 @@
+{
+    "autoDeployCommands": true,
+    "token": "",
+    "tokenDev": "",
+    "clientId": "",
+    "clientIdDev": "",
+	"guildId": "",
+    "openAIApi": "",
+    "mongoDBurl": "",
+    "unsplashAPIKey": ""
+}
