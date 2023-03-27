@@ -56,10 +56,10 @@ module.exports = {
             const storedBalance = await client.fetchBalance(interaction.guildId, interaction.user.id);
     
             if (bet < 1)
-                return interaction.reply({ content: 'You can\'t bet less than 1 coin.', ephemeral: true });
+                return interaction.editReply({ content: 'You can\'t bet less than 1 coin.', ephemeral: true });
     
             if (bet > storedBalance.balance)
-                return interaction.reply({ content: 'You don\'t have enough coins to bet that much.', ephemeral: true });
+                return interaction.editReply({ content: 'You don\'t have enough coins to bet that much.', ephemeral: true });
     
             let embed = new EmbedBuilder()
                 .setColor('#f1ac50')
