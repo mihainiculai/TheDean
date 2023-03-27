@@ -1,7 +1,43 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { Slots } = require('discord-gamecord');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const Balance = require('../models/balance.js');
 
+const fruits = ['🍇', '🍊', '🍋', '🍌'];
+
+function generateSlots() {
+    const result = [];
+    for (let i = 0; i < 3; i++) {
+        let row = [];
+        for (let j = 0; j < 3; j++)
+            row.push(fruits[Math.floor(Math.random() * fruits.length)]);
+        result.push(row);
+    }
+    return result;
+}
+function outputSlots(result, final = false) {
+    let message = "```\n"
+    message += `----------------------------\n`;
+    message += `    🎰  SLOT MACHINE  🎰    \n`;
+    message += `----------------------------\n`;
+    message += `    ${result[0][0]}   :   ${result[0][1]}   :   ${result[0][2]}    \n`;
+    message += `\n`;
+    message += ` >  ${result[1][0]}   :   ${result[1][1]}   :   ${result[1][2]}  < \n`;
+    message += `\n`;
+    message += `    ${result[2][0]}   :   ${result[2][1]}   :   ${result[2][2]}   \n`;
+    message += `----------------------------\n`;
+    if (final) {
+        if (result[1][0] === result[1][1] && result[1][1] === result[1][2]) {
+            message += ` : : : :    WIN    : : : : \n`;
+        } else {
+            message += ` : : : :    LOSE   : : : : \n`;
+        }
+    } else {
+        message += ` : : : :    SPIN    : : : : \n`;
+    }
+    message += `----------------------------\n`;
+    message += "```";
+    return message;
+}
+    
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('slots')
@@ -13,6 +49,8 @@ module.exports = {
         .setDMPermission(false),
 
     async execute(interaction, client) {
+        await interaction.deferReply();
+
         const bet = interaction.options.getNumber('bet');
         const storedBalance = await client.fetchBalance(interaction.guildId, interaction.user.id);
 
@@ -22,30 +60,45 @@ module.exports = {
         if (bet > storedBalance.balance)
             return interaction.reply({ content: 'You don\'t have enough coins to bet that much.', ephemeral: true });
 
-        const Game = new Slots({
-            message: interaction,
-            isSlashGame: true,
-            embed: {
-                title: '🎰 Slot Machine',
-                color: '#f1ac50',
-                timestamp: true,
-            },
-            slots: ['🍇', '🍊', '🍋', '🍌']
-        });
+        let embed = new EmbedBuilder()
+            .setColor('#f1ac50')
+            .setAuthor({ name: interaction.user.username, iconURL: interaction.user.avatarURL() })
+            .setDescription(outputSlots(generateSlots()))
+            .setFooter({ text: interaction.guild.name, iconURL: interaction.guild.iconURL() })
+            .setTimestamp();
+        await interaction.editReply({ embeds: [embed] });
 
-        Game.startGame();
-        Game.on('gameOver', async result => {
-            if (result.result === 'win') {
-                await Balance.findOneAndUpdate(
-                    { _id: storedBalance._id },
-                    { balance: await client.roundNumbers(storedBalance.balance + bet * 10) },
-                )
-            } else {
-                await Balance.findOneAndUpdate(
-                    { _id: storedBalance._id },
-                    { balance: await client.roundNumbers(storedBalance.balance - bet) },
-                )
-            }
-        });
-    }
+        setTimeout(async () => {
+            embed = new EmbedBuilder()
+                .setColor('#f1ac50')
+                .setAuthor({ name: interaction.user.username, iconURL: interaction.user.avatarURL() })
+                .setDescription(outputSlots(generateSlots()))
+                .setFooter({ text: interaction.guild.name, iconURL: interaction.guild.iconURL() })
+                .setTimestamp();
+            await interaction.editReply({ embeds: [embed] });
+        }, 1000);
+
+        const result = generateSlots();
+        setTimeout(async () => {
+            embed = new EmbedBuilder()
+                .setColor('#f1ac50')
+                .setAuthor({ name: interaction.user.username, iconURL: interaction.user.avatarURL() })
+                .setDescription(outputSlots(result, true))
+                .setFooter({ text: interaction.guild.name, iconURL: interaction.guild.iconURL() })
+                .setTimestamp();
+            await interaction.editReply({ embeds: [embed] });
+        }, 3000);
+
+        if (result[1][0] === result[1][1] && result[1][1] === result[1][2]) {
+            await Balance.findOneAndUpdate(
+                { _id: storedBalance._id },
+                { balance: await client.roundNumbers(storedBalance.balance + bet * 10) },
+            )
+        } else {
+            await Balance.findOneAndUpdate(
+                { _id: storedBalance._id },
+                { balance: await client.roundNumbers(storedBalance.balance - bet) },
+            )
+        }
+    },
 };
