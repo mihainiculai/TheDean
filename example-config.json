@@ -4,8 +4,8 @@
     "tokenDev": "",
     "clientId": "",
     "clientIdDev": "",
-	"guildId": "",
-    "openAIApi": "",
+    "guildId": "",
+    "openAIApiKey": "",
     "mongoDBurl": "",
     "unsplashAPIKey": ""
 }

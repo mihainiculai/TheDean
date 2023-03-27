@@ -1,14 +1,14 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const { Configuration, OpenAIApi } = require('openai');
-const { openAIApi } = require('../config.json');
+const { openAIApiKey } = require('../config.json');
 
-if (!openAIApi) {
+if (!openAIApiKey) {
     console.error('🚫 Missing OpenAI API key. Please set it up in the config file.');
     process.exit(1);
 }
 
 const config = new Configuration({
-    apiKey: openAIApi,
+    apiKey: openAIApiKey,
 });
 
 const openaiApi = new OpenAIApi(config);
