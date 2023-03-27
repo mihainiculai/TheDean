@@ -55,7 +55,7 @@ module.exports = {
         .setDMPermission(false),
 
     async execute(interaction) {
-        await interaction.deferReply();
+        await interaction.deferReply({ ephemeral: true });
 
         const title = interaction.options.getString('title');
         const description = interaction.options.getString('description');
@@ -83,6 +83,7 @@ module.exports = {
         if (field4Name && field4Value) embed.addFields({ name: field4Name, value: field4Value });
         if (field5Name && field5Value) embed.addFields({ name: field5Name, value: field5Value });
 
-        await interaction.editReply({ embeds: [embed] });
+        await interaction.editReply({ content: 'Embed message sent!', ephemeral: true });
+        await interaction.channel.send({ embeds: [embed] });
     }
 }
