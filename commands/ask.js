@@ -28,7 +28,7 @@ module.exports = {
             await interaction.deferReply();
 
             const question = interaction.options.getString('question');
-            let conversationLog = [{ role: 'system', content: 'You are a friendly chatbot.' }];
+            let conversationLog = [{ role: 'system', content: 'You are a friendly Discord bot named The Dean.' }];
 
             conversationLog.push({
                 role: 'user',
