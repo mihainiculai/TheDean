@@ -49,56 +49,63 @@ module.exports = {
         .setDMPermission(false),
 
     async execute(interaction, client) {
-        await interaction.deferReply();
+        try {
+            await interaction.deferReply();
 
-        const bet = interaction.options.getNumber('bet');
-        const storedBalance = await client.fetchBalance(interaction.guildId, interaction.user.id);
-
-        if (bet < 1)
-            return interaction.reply({ content: 'You can\'t bet less than 1 coin.', ephemeral: true });
-
-        if (bet > storedBalance.balance)
-            return interaction.reply({ content: 'You don\'t have enough coins to bet that much.', ephemeral: true });
-
-        let embed = new EmbedBuilder()
-            .setColor('#f1ac50')
-            .setAuthor({ name: interaction.user.username, iconURL: interaction.user.avatarURL() })
-            .setDescription(outputSlots(generateSlots()))
-            .setFooter({ text: interaction.guild.name, iconURL: interaction.guild.iconURL() })
-            .setTimestamp();
-        await interaction.editReply({ embeds: [embed] });
-
-        setTimeout(async () => {
-            embed = new EmbedBuilder()
+            const bet = interaction.options.getNumber('bet');
+            const storedBalance = await client.fetchBalance(interaction.guildId, interaction.user.id);
+    
+            if (bet < 1)
+                return interaction.reply({ content: 'You can\'t bet less than 1 coin.', ephemeral: true });
+    
+            if (bet > storedBalance.balance)
+                return interaction.reply({ content: 'You don\'t have enough coins to bet that much.', ephemeral: true });
+    
+            let embed = new EmbedBuilder()
                 .setColor('#f1ac50')
                 .setAuthor({ name: interaction.user.username, iconURL: interaction.user.avatarURL() })
                 .setDescription(outputSlots(generateSlots()))
                 .setFooter({ text: interaction.guild.name, iconURL: interaction.guild.iconURL() })
                 .setTimestamp();
             await interaction.editReply({ embeds: [embed] });
-        }, 1000);
-
-        const result = generateSlots();
-        setTimeout(async () => {
-            embed = new EmbedBuilder()
-                .setColor('#f1ac50')
-                .setAuthor({ name: interaction.user.username, iconURL: interaction.user.avatarURL() })
-                .setDescription(outputSlots(result, true))
-                .setFooter({ text: interaction.guild.name, iconURL: interaction.guild.iconURL() })
-                .setTimestamp();
-            await interaction.editReply({ embeds: [embed] });
-        }, 3000);
-
-        if (result[1][0] === result[1][1] && result[1][1] === result[1][2]) {
-            await Balance.findOneAndUpdate(
-                { _id: storedBalance._id },
-                { balance: await client.roundNumbers(storedBalance.balance + bet * 10) },
-            )
-        } else {
-            await Balance.findOneAndUpdate(
-                { _id: storedBalance._id },
-                { balance: await client.roundNumbers(storedBalance.balance - bet) },
-            )
+    
+            setTimeout(async () => {
+                embed = new EmbedBuilder()
+                    .setColor('#f1ac50')
+                    .setAuthor({ name: interaction.user.username, iconURL: interaction.user.avatarURL() })
+                    .setDescription(outputSlots(generateSlots()))
+                    .setFooter({ text: interaction.guild.name, iconURL: interaction.guild.iconURL() })
+                    .setTimestamp();
+                await interaction.editReply({ embeds: [embed] });
+            }, 1000);
+    
+            const result = generateSlots();
+            setTimeout(async () => {
+                embed = new EmbedBuilder()
+                    .setColor('#f1ac50')
+                    .setAuthor({ name: interaction.user.username, iconURL: interaction.user.avatarURL() })
+                    .setDescription(outputSlots(result, true))
+                    .setFooter({ text: interaction.guild.name, iconURL: interaction.guild.iconURL() })
+                    .setTimestamp();
+                await interaction.editReply({ embeds: [embed] });
+            }, 3000);
+    
+            if (result[1][0] === result[1][1] && result[1][1] === result[1][2]) {
+                await Balance.findOneAndUpdate(
+                    { _id: storedBalance._id },
+                    { balance: await client.roundNumbers(storedBalance.balance + bet * 10) },
+                )
+            } else {
+                await Balance.findOneAndUpdate(
+                    { _id: storedBalance._id },
+                    { balance: await client.roundNumbers(storedBalance.balance - bet) },
+                )
+            }
         }
+        catch (error) {
+            console.error("🚫 Error at /slots");
+            await interaction.editReply({ content: `🚫 Oops! Something went wrong. Please try again later.`, ephemeral: true });
+        }
+        
     },
 };
