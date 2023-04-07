@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, Permissions } = require('discord.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -54,8 +54,12 @@ module.exports = {
         )
         .setDMPermission(false),
 
-    async execute(interaction) {
+    async execute(interaction, client) {
         await interaction.deferReply({ ephemeral: true });
+
+        if (await client.isStaff(interaction.member) === false) {
+            return await interaction.editReply({ content: 'You do not have permission to use this command!', ephemeral: true });
+        }
 
         const title = interaction.options.getString('title');
         const description = interaction.options.getString('description');
