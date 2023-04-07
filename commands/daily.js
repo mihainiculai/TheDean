@@ -1,5 +1,4 @@
 const { SlashCommandBuilder } = require('discord.js');
-const ms = require('ms');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -15,19 +14,19 @@ module.exports = {
             const now = new Date();
             const lastDailyClaim = storedBalance.lastDailyClaim;
 
-            const dailyCooldown = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+            const dailyCooldown = 24 * 60 * 60 * 1000;
             const timeSinceLastClaim = now - lastDailyClaim;
 
             if (lastDailyClaim && timeSinceLastClaim < dailyCooldown) {
                 const remainingCooldown = dailyCooldown - timeSinceLastClaim;
-                const timeToNextDaily = ms(remainingCooldown, { long: true });
+                const timeToNextDaily = client.getDuration(remainingCooldown);
 
                 await interaction.reply({
-                    content: `⏳ You have already claimed your daily reward! You can claim it again in ${timeToNextDaily}.`,
+                    content: `⏳ You have already claimed your daily reward!\n🕒 You can claim it again in ${timeToNextDaily}.`,
                     ephemeral: true
                 });
             } else {
-                const dailyReward = 100; // Change this value to set the daily reward amount
+                const dailyReward = 100;
                 storedBalance.balance += dailyReward;
                 storedBalance.lastDailyClaim = now;
 
