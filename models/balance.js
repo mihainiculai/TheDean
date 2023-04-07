@@ -6,6 +6,6 @@ let balanceSchema = new Schema({
     userId: String,
     balance: { type: Number, default: 0 },
     lastDailyClaim: { type: Date, default: null },
-});
+}, { versionKey: false });
 
 module.exports = model('Balance', balanceSchema, 'balances');
