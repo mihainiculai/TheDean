@@ -20,6 +20,13 @@ function generateSlots() {
     else if (winRate < 30) middleRowFruit = 1;
     else if (winRate < 34) middleRowFruit = 2;
     else if (winRate < 35) middleRowFruit = 3;
+    else {
+        while (result[1][0] === result[1][1] && result[1][1] === result[1][2]) {
+            for (let i = 0; i < 3; i++) {
+                result[1][i] = fruits[Math.floor(Math.random() * fruits.length)];
+            }
+        }
+    }
     
     if (middleRowFruit !== -1) {
         result[1][0] = fruits[middleRowFruit];
@@ -99,10 +106,10 @@ module.exports = {
             const result = generateSlots();
             let winnings = 0;
             if (result[1][0] === result[1][1] && result[1][1] === result[1][2]) {
-                if (result[1][0] === '🍇') winnings = bet * 1.5;
-                else if (result[1][0] === '🍊') winnings = bet * 3;
-                else if (result[1][0] === '🍋') winnings = bet * 5;
-                else if (result[1][0] === '🍌') winnings = bet * 10;
+                if (result[1][0] === fruits[0]) winnings = bet * 1;
+                else if (result[1][0] === fruits[1]) winnings = bet * 2.5;
+                else if (result[1][0] === fruits[2]) winnings = bet * 4;
+                else if (result[1][0] === fruits[3]) winnings = bet * 5;
 
                 winnings = await client.roundNumbers(winnings);
 
