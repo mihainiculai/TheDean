@@ -5,14 +5,31 @@ const fruits = ['🍇', '🍊', '🍋', '🍌'];
 
 function generateSlots() {
     const result = [];
+    const winRate = Math.floor(Math.random() * 100);
+
     for (let i = 0; i < 3; i++) {
-        let row = [];
-        for (let j = 0; j < 3; j++)
+        const row = [];
+        for (let j = 0; j < 3; j++) {
             row.push(fruits[Math.floor(Math.random() * fruits.length)]);
+        }
         result.push(row);
     }
+    
+    let middleRowFruit = 0;
+    if (winRate < 30) middleRowFruit = 1;
+    else if (winRate < 40) middleRowFruit = 2;
+    else if (winRate < 47) middleRowFruit = 3;
+    else if (winRate < 50) middleRowFruit = 4;
+    
+    if (middleRowFruit !== 0) {
+        result[1][0] = fruits[middleRowFruit - 1];
+        result[1][1] = fruits[middleRowFruit - 1];
+        result[1][2] = fruits[middleRowFruit - 1];
+    }
+
     return result;
 }
+
 function outputSlots(result, final = false) {
     let message = "```\n"
     message += `----------------------------\n`;
@@ -80,20 +97,16 @@ module.exports = {
             }, 1000);
     
             const result = generateSlots();
-            setTimeout(async () => {
-                embed = new EmbedBuilder()
-                    .setColor('#f1ac50')
-                    .setAuthor({ name: interaction.user.username, iconURL: interaction.user.avatarURL() })
-                    .setDescription(outputSlots(result, true))
-                    .setFooter({ text: interaction.guild.name, iconURL: interaction.guild.iconURL() })
-                    .setTimestamp();
-                await interaction.editReply({ embeds: [embed] });
-            }, 3000);
-    
+            let winnings = 0;
             if (result[1][0] === result[1][1] && result[1][1] === result[1][2]) {
+                if (result[1][0] === '🍇') winnings = bet * 5;
+                else if (result[1][0] === '🍊') winnings = bet * 20;
+                else if (result[1][0] === '🍋') winnings = bet * 50;
+                else if (result[1][0] === '🍌') winnings = bet * 100;
+
                 await Balance.findOneAndUpdate(
                     { _id: storedBalance._id },
-                    { balance: await client.roundNumbers(storedBalance.balance + bet * 10) },
+                    { balance: await client.roundNumbers(storedBalance.balance + winnings) },
                 )
             } else {
                 await Balance.findOneAndUpdate(
@@ -101,11 +114,28 @@ module.exports = {
                     { balance: await client.roundNumbers(storedBalance.balance - bet) },
                 )
             }
+
+            setTimeout(async () => {
+                embed = new EmbedBuilder()
+                    .setColor('#f1ac50')
+                    .setAuthor({ name: interaction.user.username, iconURL: interaction.user.avatarURL() })
+                    .setDescription(outputSlots(result, true))
+                    .setFooter({ text: interaction.guild.name, iconURL: interaction.guild.iconURL() })
+                    .setTimestamp();
+
+                if (winnings > 0) {
+                    embed.addFields({ name: '💰 Winnings', value: `${winnings} CiberLei`, inline: true });
+                }
+                else {
+                    embed.addFields({ name: '💸 Loss', value: `${bet} CiberLei`, inline: true });
+                }
+                
+                await interaction.editReply({ embeds: [embed] });
+            }, 3000);
         }
         catch (error) {
             console.error("🚫 Error at /slots");
             await interaction.editReply({ content: `🚫 Oops! Something went wrong. Please try again later.`, ephemeral: true });
         }
-        
     },
 };
