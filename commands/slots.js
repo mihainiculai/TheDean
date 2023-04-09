@@ -15,16 +15,16 @@ function generateSlots() {
         result.push(row);
     }
     
-    let middleRowFruit = 0;
-    if (winRate < 30) middleRowFruit = 1;
-    else if (winRate < 40) middleRowFruit = 2;
-    else if (winRate < 47) middleRowFruit = 3;
-    else if (winRate < 50) middleRowFruit = 4;
+    let middleRowFruit = -1;
+    if (winRate < 25) middleRowFruit = 0;
+    else if (winRate < 30) middleRowFruit = 1;
+    else if (winRate < 34) middleRowFruit = 2;
+    else if (winRate < 35) middleRowFruit = 3;
     
-    if (middleRowFruit !== 0) {
-        result[1][0] = fruits[middleRowFruit - 1];
-        result[1][1] = fruits[middleRowFruit - 1];
-        result[1][2] = fruits[middleRowFruit - 1];
+    if (middleRowFruit !== -1) {
+        result[1][0] = fruits[middleRowFruit];
+        result[1][1] = fruits[middleRowFruit];
+        result[1][2] = fruits[middleRowFruit];
     }
 
     return result;
@@ -99,10 +99,12 @@ module.exports = {
             const result = generateSlots();
             let winnings = 0;
             if (result[1][0] === result[1][1] && result[1][1] === result[1][2]) {
-                if (result[1][0] === '🍇') winnings = bet * 5;
-                else if (result[1][0] === '🍊') winnings = bet * 20;
-                else if (result[1][0] === '🍋') winnings = bet * 50;
-                else if (result[1][0] === '🍌') winnings = bet * 100;
+                if (result[1][0] === '🍇') winnings = bet * 1.5;
+                else if (result[1][0] === '🍊') winnings = bet * 3;
+                else if (result[1][0] === '🍋') winnings = bet * 5;
+                else if (result[1][0] === '🍌') winnings = bet * 10;
+
+                winnings = await client.roundNumbers(winnings);
 
                 await Balance.findOneAndUpdate(
                     { _id: storedBalance._id },
@@ -135,6 +137,7 @@ module.exports = {
         }
         catch (error) {
             console.error("🚫 Error at /slots");
+            console.error(error);
             await interaction.editReply({ content: `🚫 Oops! Something went wrong. Please try again later.`, ephemeral: true });
         }
     },
