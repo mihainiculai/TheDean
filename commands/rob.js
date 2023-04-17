@@ -20,7 +20,6 @@ module.exports = {
 
         const selectedUserStoredBalance = await client.fetchBalance(interaction.guildId, selectedUser.id);
 
-        if (userStoredBalance.balance <= 1) return interaction.reply({ content: 'You need more money to rob someone.', ephemeral: true });
         if (selectedUserStoredBalance.balance <= 0) return interaction.reply({ content: `${selectedUser.username} has no money to be robbed.`, ephemeral: true });
         if (Math.random() < 0.3) {
             const chance = Math.random();
