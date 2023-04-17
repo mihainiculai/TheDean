@@ -9,61 +9,38 @@ module.exports = {
     async execute(interaction) {
         await interaction.deferReply({ ephemeral: true });
 
-        const rulesEmbed = new EmbedBuilder()
-            .setColor('#f1ac50')
-            .setTitle('📖 Regulament')
-            .addFields(
-                {
-                    name: "📚 Respectați regulile de bază ale Discordului",
-                    value: "Nu promovați violența, ura, discriminarea, conținutul ilegal sau necorespunzător excesiv.",
-                    inline: false
-                },
-                {
-                    name: "🤝 Fii politicos și respectuos",
-                    value: "Comunică civilizat și respectuos, evitând limbajul ofensator, atacurile personale sau provocările excesive.",
-                    inline: false
-                },
-                {
-                    name: "🚫 Nu spamați",
-                    value: "Evitați mesaje repetitive, publicitate excesivă, majuscule exagerate sau link-uri sau imagini irelevante în exces.",
-                    inline: false
-                },
-                {
-                    name: "🔒 Respectați confidențialitatea",
-                    value: "Nu divulgați informații personale despre alți membri fără consimțământul lor explicit, cum ar fi nume reale, adrese, numere de telefon sau informații financiare.",
-                    inline: false
-                },
-                {
-                    name: "🚷 Nu faceți discriminări sau hărțuire",
-                    value: "Nu tolerați discriminarea, hărțuirea, intimidarea sau comportament inacceptabil bazat pe rasă, sex, religie, orientare sexuală, vârstă, dizabilități sau alte caracteristici personale.",
-                    inline: false
-                },
-                {
-                    name: "📌 Respectați canalele și temele serverului",
-                    value: "Postați în canalele potrivite și respectați temele specifice ale acestora. Evitați off-topicurile sau postarea repetitivă a aceluiași conținut în canale diferite.",
-                    inline: false
-                },
-                {
-                    name: "😠 Nu faceți trolling, flame sau provocări",
-                    value: "Încurajați o comunicare pozitivă și constructivă în comunitate, evitând comportamentul negativ.",
-                    inline: false
-                },
-                {
-                    name: "🌙 Fără @everyone la ore târzii",
-                    value: "Nu scrieți mesaje cu @everyone la ore târzii (de preferat sub ora 22:00).",
-                    inline: false
-                },
-                {
-                    name: "🚫 Reclame interzise",
-                    value: "Reclamele la alte servere de discord/grupuri NU SUNT PERMISE.\nACESTA ESTE GRUPUL DE DISCORD OFICIAL ***CSIE++***.",
-                    inline: false
-                },
-                {
-                    name: "📩 Sugestii și recomandări",
-                    value: "Dacă doriți să faceți o sugestie sau o recomandare, puteți contacta cu încredere un @Moderator sau un @Admin.",
-                    inline: false
-                }
-            );
+        let message = "";
+        message += "```📖 Regulament```\n";
+        message += "📚 Respectați regulile de bază ale Discordului\n";
+        message += "Nu promovați violența, ura, discriminarea, conținutul ilegal sau necorespunzător excesiv.\n";
+        message += "\n";
+        message += "🤝 Fii politicos și respectuos\n";
+        message += "Comunică civilizat și respectuos, evitând limbajul ofensator, atacurile personale sau provocările excesive.\n";
+        message += "\n";
+        message += "🚫 Nu spamați\n";
+        message += "Evitați mesaje repetitive, publicitate excesivă, majuscule exagerate sau link-uri sau imagini irelevante în exces.\n";
+        message += "\n";
+        message += "🔒 Respectați confidențialitatea\n";
+        message += "Nu divulgați informații personale despre alți membri fără consimțământul lor explicit, cum ar fi nume reale, adrese, numere de telefon sau informații financiare.\n";
+        message += "\n";
+        message += "🚷 Nu faceți discriminări sau hărțuire\n";
+        message += "Nu tolerați discriminarea, hărțuirea, intimidarea sau comportament inacceptabil bazat pe rasă, sex, religie, orientare sexuală, vârstă, dizabilități sau alte caracteristici personale.\n";
+        message += "\n";
+        message += "📌 Respectați canalele și temele serverului\n";
+        message += "Postați în canalele potrivite și respectați temele specifice ale acestora. Evitați off-topicurile sau postarea repetitivă a aceluiași conținut în canale diferite.\n";
+        message += "\n";
+        message += "😠 Nu faceți trolling, flame sau provocări\n";
+        message += "Încurajați o comunicare pozitivă și constructivă în comunitate, evitând comportamentul negativ.\n";
+        message += "\n";
+        message += "🌙 Fără @everyone la ore târzii\n";
+        message += "Nu scrieți mesaje cu @everyone la ore târzii (de preferat sub ora 22:00).\n";
+        message += "\n";
+        message += "🚫 Reclame interzise\n";
+        message += "Reclamele la alte servere de discord/grupuri NU SUNT PERMISE.\n";
+        message += "ACESTA ESTE GRUPUL DE DISCORD OFICIAL ***CSIE++***.\n";
+        message += "\n";
+        message += "📩 Sugestii și recomandări\n";
+        message += "Dacă doriți să faceți o sugestie sau o recomandare, puteți contacta cu încredere un @Moderator sau un @Admin.\n";
 
         const aboutChannelsEmbed = new EmbedBuilder()
             .setColor('#f1ac50')
@@ -135,9 +112,11 @@ module.exports = {
         
         await interaction.editReply({ content: 'Rules has been sent successfully!', ephemeral: true });
 
-        await interaction.channel.send({ embeds: [rulesEmbed] });
-        await interaction.channel.send({ embeds: [aboutChannelsEmbed] });
-        await interaction.channel.send({ embeds: [rolesEmbed] });
-        await interaction.channel.send({ embeds: [inviteEmbed] });
+        //send message
+        await interaction.channel.send( { content: message } );
+        //await interaction.channel.send({ embeds: [rulesEmbed] });
+        //await interaction.channel.send({ embeds: [aboutChannelsEmbed] });
+        //await interaction.channel.send({ embeds: [rolesEmbed] });
+        //await interaction.channel.send({ embeds: [inviteEmbed] });
     },
 };
