@@ -48,8 +48,8 @@ module.exports = {
 
             const responseEmbed = new EmbedBuilder()
                 .setColor('#f1ac50')
-                .setTitle(question)
                 .setAuthor({ name: interaction.user.username, iconURL: interaction.user.avatarURL() })
+                .addFields({ name: 'Question', value: question, inline: true })
                 .addFields({ name: 'Answer', value: result.data.choices[0].message.content, inline: true })
                 .setFooter({ text: interaction.guild.name, iconURL: interaction.guild.iconURL() })
                 .setTimestamp();
