@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const { Configuration, OpenAIApi } = require('openai');
+const { OpenAI } = require('openai');
 const { openAIApiKey } = require('../config.json');
 
 if (!openAIApiKey) {
@@ -7,11 +7,9 @@ if (!openAIApiKey) {
     process.exit(1);
 }
 
-const config = new Configuration({
+const openai = new OpenAI({
     apiKey: openAIApiKey,
 });
-
-const openaiApi = new OpenAIApi(config);
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -28,29 +26,22 @@ module.exports = {
             await interaction.deferReply();
 
             const question = interaction.options.getString('question');
-            let conversationLog = [{ role: 'system', content: 'You are a friendly Discord bot named The Dean.' }];
+            const conversation = [
+                { role: 'system', content: 'You are a friendly Discord bot named The Dean. Your are the bot of "CSIE++" discord server, the official server of CSIE (Faculty of Cybernetics, Statistics and Informatics from Bucharest).' },
+                { role: 'user', content: question },
+            ];
 
-            conversationLog.push({
-                role: 'user',
-                content: question,
+            const result = await openai.chat.completions.create({
+                model: 'gpt-3.5-turbo',
+                messages: conversation,
+                max_tokens: 256,
             });
-
-            const result = await openaiApi
-                .createChatCompletion({
-                    model: 'gpt-3.5-turbo',
-                    messages: conversationLog,
-                    max_tokens: 256,
-                })
-                .catch((error) => {
-                    console.log(`❌ OpenAI error: ${error}`);
-                    throw error;
-                });
 
             const responseEmbed = new EmbedBuilder()
                 .setColor('#f1ac50')
                 .setAuthor({ name: interaction.user.username, iconURL: interaction.user.avatarURL() })
                 .addFields({ name: 'Question', value: question, inline: false })
-                .addFields({ name: 'Answer', value: result.data.choices[0].message.content, inline: false })
+                .addFields({ name: 'Answer', value: result.choices[0].message.content, inline: false })
                 .setFooter({ text: interaction.guild.name, iconURL: interaction.guild.iconURL() })
                 .setTimestamp();
 
@@ -58,6 +49,7 @@ module.exports = {
 
         } catch (error) {
             console.error("🚫 Error at /ask");
+            console.error(error);
             await interaction.editReply({ content: `🚫 Oops! Something went wrong. Please try again later.`, ephemeral: true });
         }
     }
