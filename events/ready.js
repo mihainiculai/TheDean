@@ -9,7 +9,6 @@ module.exports = {
 		if (!mongoDBurl) return console.error('❌ No MongoDB URL provided');
 
 		mongoose.connect(mongoDBurl || '', {
-			keepAlive: true,
 			useNewUrlParser: true,
 			useUnifiedTopology: true,
 		})
