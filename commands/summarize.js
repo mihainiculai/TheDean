@@ -37,16 +37,19 @@ module.exports = {
             const messages = channelMessages.filter(message => message.createdAt > Date.now() - (hours * 60 * 60 * 1000));
 
             const conversation = messages.map(message => ({ role: 'user', content: `[${message.createdAt}] ${message.author.username}: ${message.content}` }));
+            conversation.unshift({ role: 'system', content: 'Summarize this conversation:' });
+
+            let tokens = JSON.stringify(conversation).length;
+            while (tokens > 4097) {
+                conversation.shift();
+                tokens = JSON.stringify(conversation).length;
+            }
 
             const result = await openai.chat.completions.create({
                 model: 'gpt-3.5-turbo',
-                messages: [
-                  ...conversation,
-                  { role: 'user', content: 'This is the conversation.' },
-                  { role: 'system', content: 'Summarize this conversation:' },
-                ],
+                messages: conversation,
                 max_tokens: 256,
-              });
+            });
 
             const responseEmbed = new EmbedBuilder()
                 .setColor('#f1ac50')
