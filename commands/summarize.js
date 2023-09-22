@@ -36,8 +36,8 @@ module.exports = {
             const channelMessages = await interaction.channel.messages.fetch({ limit: 100 });
             const messages = channelMessages.filter(message => message.createdAt > Date.now() - (hours * 60 * 60 * 1000));
 
-            const conversation = messages.map(message => ({ role: 'user', content: `[${message.createdAt}] ${message.author.username}: ${message.content}` }));
-            conversation.unshift({ role: 'system', content: 'Summarize this conversation:' });
+            const conversation = messages.map(message => ({ role: 'user', content: `[${message.createdAt.toLocaleString('ro-RO', { dateStyle: 'short', timeStyle: 'short' })}] ${message.author.username}: ${message.content}` }));
+            conversation.push({ role: 'system', content: 'Fa un rezumat detaliat la aceasta conversatie:' });
 
             let tokens = JSON.stringify(conversation).length;
             while (tokens > 4097) {
@@ -45,10 +45,13 @@ module.exports = {
                 tokens = JSON.stringify(conversation).length;
             }
 
+            console.log(`🤖 Conversation length: ${tokens} tokens`);
+            console.log(conversation);
+
             const result = await openai.chat.completions.create({
                 model: 'gpt-3.5-turbo',
                 messages: conversation,
-                max_tokens: 256,
+                max_tokens: 512,
             });
 
             const responseEmbed = new EmbedBuilder()
