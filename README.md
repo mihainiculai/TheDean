@@ -1,6 +1,6 @@
 <p align="center">
 	<br>
-    <img src="https://imgur.com/a/REdqICK" alt="Logo" width="100">
+    <img src="https://i.imgur.com/oSTVVC1.png" alt="Logo" width="100">
     <h3 align="center">TheDean</h3>
     <br>
 </p
@@ -18,7 +18,7 @@ TheDean supports a variety of commands tailored for student needs:
 - `meme`: Delivers a laugh with a meme
 - `poll`: Creates custom polls
 - `restanta`: Offers information about overdue subjects
-- `summarize`: Offers information about overdue subjects
+- `summarize`: Summarize the last messages in a channel
 - ... and many more!
 
 ### 🎯 Quick and Efficient
