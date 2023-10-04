@@ -13,10 +13,9 @@ module.exports = {
         .setDMPermission(false),
 
     async execute(interaction) {
-
-        const subject = interaction.options.getString('subject');
-
         try {
+            const subject = interaction.options.getString('subject');
+
             if (!unsplashAPIKey)
                 throw new Error('🚫 Missing Unsplash API key. Please set it up in the config file.');
 

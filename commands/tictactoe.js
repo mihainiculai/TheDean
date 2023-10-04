@@ -40,7 +40,7 @@ module.exports = {
 
         Game.startGame();
         Game.on('gameOver', result => {
-            //console.log(`${result.player.username} result: ${result.result}`);
+            // TO DO: Add economy support
         });
     },
 };

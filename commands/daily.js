@@ -38,7 +38,7 @@ module.exports = {
                 });
             }
         } catch (error) {
-            console.error("🚫 Error at /daily");
+            console.error("🚫 Error at /daily", error);
             await interaction.editReply({ content: `🚫 Oops! Something went wrong. Please try again later.`, ephemeral: true });
         }
     }

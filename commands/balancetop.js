@@ -37,7 +37,7 @@ module.exports = {
                 });
             }
         } catch (error) {
-            console.error("🚫 Error at /balancetop");
+            console.error("🚫 Error at /balancetop", error);
             await interaction.reply({ content: `🚫 Oops! Something went wrong. Please try again later.`, ephemeral: true });
         }
     }

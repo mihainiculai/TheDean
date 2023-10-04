@@ -32,7 +32,7 @@ module.exports = {
             await interaction.editReply({ embeds: [embed] });
         }
         catch (error) {
-            console.error("🚫 Error at /userinfo");
+            console.error("🚫 Error at /userinfo", error);
             await interaction.editReply('🚫 An error occurred. Please try again later.');
         }
     },

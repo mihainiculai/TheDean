@@ -48,8 +48,7 @@ module.exports = {
             await interaction.editReply({ embeds: [responseEmbed] });
 
         } catch (error) {
-            console.error("🚫 Error at /ask");
-            console.error(error);
+            console.error("🚫 Error at /ask", error);
             await interaction.editReply({ content: `🚫 Oops! Something went wrong. Please try again later.`, ephemeral: true });
         }
     }

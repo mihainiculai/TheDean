@@ -16,35 +16,42 @@ module.exports = {
         .setDMPermission(false),
 
     async execute(interaction, client) {
-        const userStoredBalance = await client.fetchBalance(interaction.guildId, interaction.user.id);
-        let amount = interaction.options.getNumber('amount');
-        const selectedUser = interaction.options.getUser('user');
+        try {
 
-        if (selectedUser.bot) return interaction.reply({ content: 'You can\'t send money a bot.', ephemeral: true });
-        else if (selectedUser.id === interaction.user.id) return interaction.reply({ content: 'You can\'t send money to yourself.', ephemeral: true });
-        else if (amount < 1) return interaction.reply({ content: 'You can\'t send less than 1 coin.', ephemeral: true });
-        else if (amount > userStoredBalance.balance) return interaction.reply({ content: 'You don\'t have enough coins.', ephemeral: true });
+            const userStoredBalance = await client.fetchBalance(interaction.guildId, interaction.user.id);
+            let amount = interaction.options.getNumber('amount');
+            const selectedUser = interaction.options.getUser('user');
 
-        const selectedUserStoredBalance = await client.fetchBalance(interaction.guildId, selectedUser.id);
+            if (selectedUser.bot) return interaction.reply({ content: 'You can\'t send money a bot.', ephemeral: true });
+            else if (selectedUser.id === interaction.user.id) return interaction.reply({ content: 'You can\'t send money to yourself.', ephemeral: true });
+            else if (amount < 1) return interaction.reply({ content: 'You can\'t send less than 1 coin.', ephemeral: true });
+            else if (amount > userStoredBalance.balance) return interaction.reply({ content: 'You don\'t have enough coins.', ephemeral: true });
 
-        amount = await client.roundNumbers(amount);
+            const selectedUserStoredBalance = await client.fetchBalance(interaction.guildId, selectedUser.id);
 
-        await Balance.findOneAndUpdate(
-            { _id: userStoredBalance._id },
-            { balance: await client.roundNumbers(userStoredBalance.balance - amount) },
-        )
-        await Balance.findOneAndUpdate(
-            { _id: selectedUserStoredBalance._id },
-            { balance: await client.roundNumbers(selectedUserStoredBalance.balance + amount) },
-        )
+            amount = await client.roundNumbers(amount);
 
-        const embed = new EmbedBuilder()
-            .setTitle('Payment')
-            .setDescription(`You have sent ${amount} coins to ${selectedUser.username}.`)
-            .setColor('#f1ac50')
-            .setFooter({ text: interaction.guild.name, iconURL: interaction.guild.iconURL() })
-            .setTimestamp();
+            await Balance.findOneAndUpdate(
+                { _id: userStoredBalance._id },
+                { balance: await client.roundNumbers(userStoredBalance.balance - amount) },
+            )
+            await Balance.findOneAndUpdate(
+                { _id: selectedUserStoredBalance._id },
+                { balance: await client.roundNumbers(selectedUserStoredBalance.balance + amount) },
+            )
 
-        await interaction.reply({ embeds: [embed], ephemeral: true });
+            const embed = new EmbedBuilder()
+                .setTitle('Payment')
+                .setDescription(`You have sent ${amount} coins to ${selectedUser.username}.`)
+                .setColor('#f1ac50')
+                .setFooter({ text: interaction.guild.name, iconURL: interaction.guild.iconURL() })
+                .setTimestamp();
+
+            await interaction.reply({ embeds: [embed], ephemeral: true });
+        }
+        catch (error) {
+            console.error("🚫 Error at /pay", error);
+            await interaction.reply({ content: `🚫 Oops! Something went wrong. Please try again later.`, ephemeral: true });
+        }
     }
 };

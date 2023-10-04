@@ -45,9 +45,6 @@ module.exports = {
                 tokens = JSON.stringify(conversation).length;
             }
 
-            console.log(`🤖 Conversation length: ${tokens} tokens`);
-            console.log(conversation);
-
             const result = await openai.chat.completions.create({
                 model: 'gpt-3.5-turbo',
                 messages: conversation,
@@ -64,8 +61,7 @@ module.exports = {
             await interaction.editReply({ embeds: [responseEmbed] });
 
         } catch (error) {
-            console.error("🚫 Error at /summarize");
-            console.error(error);
+            console.error("🚫 Error at /summarize", error);
             await interaction.editReply({ content: `🚫 Oops! Something went wrong. Please try again later.`, ephemeral: true });
         }
     }

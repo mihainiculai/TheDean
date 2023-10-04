@@ -29,7 +29,7 @@ module.exports = {
                 .setTimestamp();
             await interaction.reply({ embeds: [catEmbed] });
         } catch (error) {
-            console.error("🚫 Error at /animalutze");
+            console.error("🚫 Error at /animalutze", error);
             await interaction.reply(
                 { content: '🚫 Oops! Something went wrong. Please try again later.', ephemeral: true }
             );

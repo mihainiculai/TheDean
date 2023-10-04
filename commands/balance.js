@@ -37,7 +37,7 @@ module.exports = {
             }
 
         } catch (error) {
-            console.error("🚫 Error at /balance");
+            console.error("🚫 Error at /balance", error);
             await interaction.editReply({ content: `🚫 Oops! Something went wrong. Please try again later.`, ephemeral: true });
         }
     }

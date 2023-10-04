@@ -143,8 +143,7 @@ module.exports = {
             }, 3000);
         }
         catch (error) {
-            console.error("🚫 Error at /slots");
-            console.error(error);
+            console.error("🚫 Error at /slots", error);
             await interaction.editReply({ content: `🚫 Oops! Something went wrong. Please try again later.`, ephemeral: true });
         }
     },
