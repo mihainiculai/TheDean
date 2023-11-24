@@ -8,10 +8,7 @@ module.exports = {
 	execute(client) {
 		if (!mongoDBurl) return console.error('❌ No MongoDB URL provided');
 
-		mongoose.connect(mongoDBurl || '', {
-			useNewUrlParser: true,
-			useUnifiedTopology: true,
-		})
+		mongoose.connect(mongoDBurl || '');
 
 		if (mongoose.connect)
 			console.log('✅ Connected to database');
