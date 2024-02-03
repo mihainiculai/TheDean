@@ -47,7 +47,7 @@ module.exports = {
             }
 
             const result = await openai.chat.completions.create({
-                model: 'gpt-4-0125-preview	',
+                model: 'gpt-3.5-turbo-0125',
                 messages: conversation.reverse(),
                 max_tokens: 512,
             });
