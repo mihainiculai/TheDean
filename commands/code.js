@@ -28,7 +28,7 @@ module.exports = {
 
             const question = interaction.options.getString('question');
             const conversation = [
-                { role: 'system', content: 'You are a friendly Discord bot named The Dean. You must write messages formatted for Discord. If the message is too long, you must separate the message into multiple messages. Each message must have a maximum of 2000 characters. Separate the messages with "\n\n".' },
+                { role: 'system', content: 'You must write messages formatted for Discord (you can format the code in codeblocks for example). You are used for /code command to wrie code. Maximum message size is 2000 chars.' },
                 { role: 'user', content: question },
             ];
 
@@ -39,22 +39,11 @@ module.exports = {
             });
 
             const responseContent = result.choices[0].message.content;
-            const paragraphs = responseContent.split('\n\n');
-
-            let currentMessage = '';
-            for (const paragraph of paragraphs) {
-                if ((currentMessage + paragraph).length > 2000) {
-                    await interaction.followUp(currentMessage);
-                    currentMessage = paragraph;
-                } else {
-                    currentMessage += `\n\n${paragraph}`;
-                }
+            if (responseContent.length > 2000) {
+                responseContent = responseContent.substring(0, 1999);
             }
 
-            if (currentMessage) {
-                await interaction.followUp(currentMessage);
-            }
-
+            await interaction.editReply({ content: responseContent });
         } catch (error) {
             logger.error("🚫 Error at /ask", error);
             await interaction.editReply({ content: `🚫 Oops! Something went wrong. Please try again later.`, ephemeral: true });
