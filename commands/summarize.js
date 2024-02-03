@@ -1,6 +1,7 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const { OpenAI } = require('openai');
 const { openAIApiKey } = require('../config.json');
+const logger = require('../logger');
 
 if (!openAIApiKey) {
     console.error('🚫 Missing OpenAI API key. Please set it up in the config file.');
@@ -61,7 +62,7 @@ module.exports = {
             await interaction.editReply({ embeds: [responseEmbed] });
 
         } catch (error) {
-            console.error("🚫 Error at /summarize", error);
+            logger.error("🚫 Error at /summarize", error);
             await interaction.editReply({ content: `🚫 Oops! Something went wrong. Please try again later.`, ephemeral: true });
         }
     }

@@ -1,6 +1,7 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const axios = require('axios');
 const { unsplashAPIKey } = require('../config.json');
+const logger = require('../logger');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -29,7 +30,7 @@ module.exports = {
                 .setTimestamp();
             await interaction.reply({ embeds: [catEmbed] });
         } catch (error) {
-            console.error("🚫 Error at /animalutze", error);
+            logger.error("🚫 Error at /animalutze", error);
             await interaction.reply(
                 { content: '🚫 Oops! Something went wrong. Please try again later.', ephemeral: true }
             );

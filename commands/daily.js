@@ -1,4 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
+const logger = require('../logger');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -38,7 +39,7 @@ module.exports = {
                 });
             }
         } catch (error) {
-            console.error("🚫 Error at /daily", error);
+            logger.error("🚫 Error at /daily", error);
             await interaction.editReply({ content: `🚫 Oops! Something went wrong. Please try again later.`, ephemeral: true });
         }
     }

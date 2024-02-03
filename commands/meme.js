@@ -1,5 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const axios = require('axios');
+const logger = require('../logger');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -26,7 +27,7 @@ module.exports = {
             await interaction.reply({ embeds: [embed] });
         }
         catch (error) {
-            console.error("🚫 Error at /meme");
+            logger.error("🚫 Error at /meme", error);
             await interaction.editReply({ content: `🚫 Oops! Something went wrong. Please try again later.`, ephemeral: true });
         }
     },

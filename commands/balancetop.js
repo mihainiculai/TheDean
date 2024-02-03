@@ -1,4 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const logger = require('../logger');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -37,7 +38,7 @@ module.exports = {
                 });
             }
         } catch (error) {
-            console.error("🚫 Error at /balancetop", error);
+            logger.error("🚫 Error at /balancetop", error);
             await interaction.reply({ content: `🚫 Oops! Something went wrong. Please try again later.`, ephemeral: true });
         }
     }

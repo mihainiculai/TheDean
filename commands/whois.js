@@ -1,4 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const logger = require('../logger');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -32,7 +33,7 @@ module.exports = {
             await interaction.editReply({ embeds: [embed] });
         }
         catch (error) {
-            console.error("🚫 Error at /userinfo", error);
+            logger.error("🚫 Error at /whois", error);
             await interaction.editReply('🚫 An error occurred. Please try again later.');
         }
     },

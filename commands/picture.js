@@ -1,6 +1,7 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const axios = require('axios');
 const { unsplashAPIKey } = require('../config.json');
+const logger = require('../logger');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -36,7 +37,7 @@ module.exports = {
             await interaction.reply({ embeds: [catEmbed] });
         }
         catch (error) {
-            console.error("🚫 Error at /picture");
+            logger.error("🚫 Error at /picture", error);
             await interaction.reply(
                 { content: '🚫 Oops! No picture found. Please try again later.', ephemeral: true }
             );

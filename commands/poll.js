@@ -1,4 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const logger = require('../logger');
 
 const createOption = (name, description, required = false) => {
     return option => option.setName(name)
@@ -49,7 +50,7 @@ module.exports = {
             const pollMessage = await interaction.editReply({ embeds: [pollEmbed] });
             await addReactions(pollMessage, options.filter(Boolean).length);
         } catch (error) {
-            console.error("🚫 Error at /poll", error);
+            logger.error("🚫 Error at /poll", error);
             await interaction.editReply({ content: `🚫 Oops! Something went wrong. Please try again later.`, ephemeral: true });
         }
     }

@@ -1,5 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const Balance = require('../models/balance.js');
+const logger = require('../logger');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -50,7 +51,7 @@ module.exports = {
             await interaction.reply({ embeds: [embed], ephemeral: true });
         }
         catch (error) {
-            console.error("🚫 Error at /pay", error);
+            logger.error("🚫 Error at /pay", error);
             await interaction.reply({ content: `🚫 Oops! Something went wrong. Please try again later.`, ephemeral: true });
         }
     }

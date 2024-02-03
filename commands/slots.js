@@ -1,5 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const Balance = require('../models/balance.js');
+const logger = require('../logger');
 
 const fruits = ['🍇', '🍊', '🍋', '🍌'];
 
@@ -143,7 +144,7 @@ module.exports = {
             }, 3000);
         }
         catch (error) {
-            console.error("🚫 Error at /slots", error);
+            logger.error("🚫 Error at /slots", error);
             await interaction.editReply({ content: `🚫 Oops! Something went wrong. Please try again later.`, ephemeral: true });
         }
     },
