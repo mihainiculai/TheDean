@@ -33,7 +33,7 @@ module.exports = {
             ];
 
             const result = await openai.chat.completions.create({
-                model: 'gpt-3.5-turbo-0125',
+                model: 'gpt-4-0125-preview',
                 messages: conversation,
                 max_tokens: 512,
             });
