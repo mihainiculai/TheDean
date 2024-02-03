@@ -28,7 +28,8 @@ module.exports = {
 
             const question = interaction.options.getString('question');
             const conversation = [
-                { role: 'system', content: 'You must write messages formatted for Discord (you can format the code in codeblocks for example). You are used for /code command to wrie code. Maximum message size is 2000 chars.' },
+                { role: 'system', content: 'You must write messages formatted for Discord (you can format the code in codeblocks for example). You are used for /code command to write code.' },
+                { role: 'system', content: 'Maximum message length is 1800 characters.' },
                 { role: 'user', content: question },
             ];
 
@@ -38,14 +39,14 @@ module.exports = {
                 max_tokens: 512,
             });
 
-            const responseContent = result.choices[0].message.content;
+            let responseContent = result.choices[0].message.content;
             if (responseContent.length > 2000) {
                 responseContent = responseContent.substring(0, 1999);
             }
 
             await interaction.editReply({ content: responseContent });
         } catch (error) {
-            logger.error("🚫 Error at /ask", error);
+            logger.error("🚫 Error at /code", error);
             await interaction.editReply({ content: `🚫 Oops! Something went wrong. Please try again later.`, ephemeral: true });
         }
     }
