@@ -7,8 +7,12 @@ module.exports = {
         .setDescription('Replies with the rules of the server.')
         .setDMPermission(false),
 
-    async execute(interaction) {
+    async execute(interaction, client) {
         await interaction.deferReply({ ephemeral: true });
+
+        if (await client.isStaff(interaction.member) === false) {
+            return await interaction.editReply({ content: 'You do not have permission to use this command!', ephemeral: true });
+        }
 
         let message = "# 📖 Regulament";
 
