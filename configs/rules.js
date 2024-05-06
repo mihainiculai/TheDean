@@ -9,7 +9,7 @@ const rules = [
     },
     {
         title: '🚫 Nu spamați',
-        description: 'Evitați mesaje repetitive, publicitate excesivă, majuscule exagerate sau link-uri sau imagini irelevante în exces.'
+        description: 'Evitați mesaje repetitive, majuscule exagerate sau link-uri sau imagini irelevante în exces.'
     },
     {
         title: '🔒 Respectați confidențialitatea',
@@ -28,8 +28,8 @@ const rules = [
         description: 'Încurajați o comunicare pozitivă și constructivă în comunitate, evitând comportamentul negativ.'
     },
     {
-        title: '🌙 Fără @everyone la ore târzii',
-        description: 'Nu scrieți mesaje cu @everyone la ore târzii (de preferat până la ora 22:00).'
+        title: '🌙 Fără ``@everyone`` la ore târzii',
+        description: 'Nu scrieți mesaje cu ``@everyone`` la ore târzii (de preferat până la ora 22:00).'
     },
     {
         title: '🚫 Reclame interzise',
