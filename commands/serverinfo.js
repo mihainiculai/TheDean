@@ -18,7 +18,7 @@ module.exports = {
                 { name: "📅 Created at", value: `${interaction.guild.createdAt}`, inline: false },
                 { name: "👑 Owner", value: `<@${interaction.guild.ownerId}>`, inline: true },
                 { name: "👥 Members", value: `${interaction.guild.memberCount}`, inline: true },
-                { name: "🌍 Region", value: `${interaction.guild.region}`, inline: true },
+                { name: "🌐 Locale", value: `${interaction.guild.preferredLocale}`, inline: true },
                 { name: "📜 Roles", value: `${interaction.guild.roles.cache.size}`, inline: true },
                 { name: "📁 Channels", value: `${interaction.guild.channels.cache.size}`, inline: true },
                 { name: "😋 Emojis", value: `${interaction.guild.emojis.cache.size}`, inline: true },
