@@ -19,11 +19,11 @@ Your response MUST be a valid JSON object with the following structure:
 {
     "paragraphs": [
         {
-            "title": "Title for paragraph 1",
+            "title": "[EMOJI] Title for paragraph 1",
             "content": "Content of paragraph 1"
         },
         {
-            "title": "Title for paragraph 2",
+            "title": "[EMOJI] Title for paragraph 2",
             "content": "Content of paragraph 2"
         },
         ...
@@ -31,6 +31,7 @@ Your response MUST be a valid JSON object with the following structure:
 }
 Each paragraph's content should have a maximum of 800 characters.
 Provide concise and relevant titles for subsequent paragraphs.
+Replace [EMOJI] with an emoji that represents the paragraph.
 Avoid creating more paragraphs than necessary.
 `;
 
