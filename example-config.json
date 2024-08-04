@@ -8,6 +8,8 @@
     "openAIApiKey": "",
     "openAIModelSimpleTask": "gpt-4o-mini",
     "openAIModelComplexTask": "gpt-4o",
+    "claudeApiKey": "",
+    "claudeModel": "claude-3-5-sonnet-20240620",
     "mongoDBurl": "",
     "unsplashAPIKey": ""
 }
