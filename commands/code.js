@@ -44,7 +44,7 @@ module.exports = {
                 .setDescription('Choose the AI model to use.')
                 .setRequired(true)
                 .addChoices(
-                    { name: 'Claude 3.5 Sonnet (Recommended)', value: 'claude' },
+                    // { name: 'Claude 3.5 Sonnet (Recommended)', value: 'claude' },
                     { name: 'GPT 4o', value: 'openai' }
                 ))
         .setDMPermission(false),
