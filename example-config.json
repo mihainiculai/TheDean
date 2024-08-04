@@ -6,6 +6,8 @@
     "clientIdDev": "",
     "guildId": "",
     "openAIApiKey": "",
+    "openAIModelSimpleTask": "gpt-4o-mini",
+    "openAIModelComplexTask": "gpt-4o",
     "mongoDBurl": "",
     "unsplashAPIKey": ""
 }
