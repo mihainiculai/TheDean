@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js');
 const { OpenAI } = require('openai');
-const { openAIApiKey } = require('../config.json');
+const { openAIApiKey, openAIModelComplexTask } = require('../config.json');
 const logger = require('../logger');
 
 if (!openAIApiKey) {
@@ -11,6 +11,24 @@ if (!openAIApiKey) {
 const openai = new OpenAI({
     apiKey: openAIApiKey,
 });
+
+const system_prompt = `
+You are a friendly Discord bot named The Dean.
+You are the bot of "CSIE++" discord server, the official server of CSIE (Faculty of Cybernetics, Statistics and Informatics from Bucharest).
+You are now used for /code command to write code or to answer questions about programming.
+Use discord markdown to format your messages and use codeblocks for code.
+
+Your response MUST be a valid JSON object with the following structure:
+{
+    "messages": [
+        "Message 1",
+        "Message 2",
+        ...
+    ]
+}
+
+Each message should have a maximum of 1500 characters.
+`;
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -28,23 +46,33 @@ module.exports = {
 
             const question = interaction.options.getString('question');
             const conversation = [
-                { role: 'system', content: 'You must write messages formatted for Discord (you can format the code in codeblocks for example). You are used for /code command to write code.' },
-                { role: 'system', content: 'Maximum message length is 1800 characters.' },
+                { role: 'system', content: system_prompt },
                 { role: 'user', content: question },
             ];
 
             const result = await openai.chat.completions.create({
-                model: 'gpt-4-turbo',
+                model: openAIModelComplexTask,
                 messages: conversation,
-                max_tokens: 512,
+                response_format: { type: "json_object" }
             });
 
-            let responseContent = result.choices[0].message.content;
-            if (responseContent.length > 2000) {
-                responseContent = responseContent.substring(0, 1999);
+            const responseContent = result.choices[0].message.content;
+
+            let messages;
+            try {
+                const parsedResponse = JSON.parse(responseContent);
+                messages = parsedResponse.messages;
+            } catch (error) {
+                messages = [];
+                let parts = responseContent.match(/.{1,1500}/g) || [];
+                messages = parts;
             }
 
-            await interaction.editReply({ content: responseContent });
+            await interaction.editReply({ content: messages[0] });
+
+            for (const message of messages.slice(1)) {
+                await interaction.channel.send({ content: message });
+            }
         } catch (error) {
             logger.error("🚫 Error at /code", error);
             await interaction.editReply({ content: `🚫 Oops! Something went wrong. Please try again later.`, ephemeral: true });
